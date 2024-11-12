@@ -21,8 +21,9 @@ class LoginViewController : UIViewController {
         field.returnKeyType = .continue
         field.layer.cornerRadius = 12
         field.layer.borderColor = UIColor.lightGray.cgColor
-        field.placeholder = "Enter your Email"
+        field.placeholder = " Enter your Email"
         field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 5, height: 0))
+        field.leftViewMode = .always
         field.backgroundColor = .secondarySystemBackground
         return field
         
@@ -37,6 +38,7 @@ class LoginViewController : UIViewController {
         field.layer.borderColor = UIColor.lightGray.cgColor
         field.placeholder = "Enter your password"
         field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 5, height: 0))
+        field.leftViewMode = .always
         field.backgroundColor = .secondarySystemBackground
         field.isSecureTextEntry = true
         return field
@@ -52,6 +54,7 @@ class LoginViewController : UIViewController {
         field.layer.borderColor = UIColor.lightGray.cgColor
         field.placeholder = "Enter your First Name"
         field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 5, height: 0))
+        field.leftViewMode = .always
         field.backgroundColor = .secondarySystemBackground
         return field
         
@@ -66,6 +69,7 @@ class LoginViewController : UIViewController {
         field.layer.borderColor = UIColor.lightGray.cgColor
         field.placeholder = "Enter your Last Name"
         field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 5, height: 0))
+        field.leftViewMode = .always
         field.backgroundColor = .secondarySystemBackground
         return field
         
@@ -80,6 +84,7 @@ class LoginViewController : UIViewController {
         field.layer.borderColor = UIColor.lightGray.cgColor
         field.placeholder = "DOB"
         field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 5, height: 0))
+        field.leftViewMode = .always
         field.backgroundColor = .secondarySystemBackground
         return field
         
@@ -94,6 +99,7 @@ class LoginViewController : UIViewController {
         field.layer.borderColor = UIColor.lightGray.cgColor
         field.placeholder = "Enter your pincode"
         field.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 5, height: 0))
+        field.leftViewMode = .always
         field.backgroundColor = .secondarySystemBackground
         return field
         
@@ -145,9 +151,6 @@ class LoginViewController : UIViewController {
     //Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        UserDefaults.standard.synchronize()
-        
-        
         view.addSubview(emailTextField)
         view.addSubview(passwordTextField)
         view.addSubview(firstNameTextField)
@@ -157,12 +160,16 @@ class LoginViewController : UIViewController {
         view.addSubview(aboutMeTextView)
         view.addSubview(selfieButton)
         view.addSubview(submitButton)
+        emailTextField.delegate = self
+        passwordTextField.delegate = self
+        firstNameTextField.delegate = self
+        lastNameTextField.delegate = self
+        pincodeTextField.delegate = self
         dobTextField.delegate = self
         dobTextField.inputView = datePicker
         datePicker.addTarget(self, action: #selector(didSelectDate), for: .valueChanged)
         selfieButton.addTarget(self, action: #selector(captureSelfie), for: .touchUpInside)
         submitButton.addTarget(self, action: #selector(didTapSubmit), for: .touchUpInside)
-
     }
     
     override func viewDidLayoutSubviews() {
@@ -176,9 +183,8 @@ class LoginViewController : UIViewController {
         pincodeTextField.frame = CGRect(x: 20, y: dobTextField.bottom + 10, width: view.width - 40 , height: 50)
         selfieButton.frame = CGRect(x: 20, y: pincodeTextField.bottom + 10, width: view.width - 40 , height: 50)
         submitButton.frame = CGRect(x: 20, y: selfieButton.bottom + 10, width: view.width - 40 , height: 50)
-
-
     }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
@@ -200,7 +206,13 @@ extension LoginViewController : UITextFieldDelegate,UITextViewDelegate{
         }
     }
     
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+    }
     
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        textField.resignFirstResponder()
+    }
 }
 
 extension LoginViewController : UIImagePickerControllerDelegate, UINavigationControllerDelegate{
@@ -256,6 +268,8 @@ extension LoginViewController : UIImagePickerControllerDelegate, UINavigationCon
     private func sendOTPToEmail(_ email:String){
         currentOTP = String(format: "%06d", arc4random_uniform(1000000))
         print("OTP sent to \(email) : \(currentOTP!)")
+        showToast(message: currentOTP!)
+        
         
         // implementaion of OTP alert
         showOTPAlert()

@@ -74,7 +74,6 @@ class ViewController: UIViewController {
     
     private func setupUI() {
         view.addSubview(scrollMainView)
-        
         scrollMainView.addSubview(imagesScrollView)
         scrollMainView.addSubview(nameLabel)
         scrollMainView.addSubview(dobLabel)
@@ -82,17 +81,14 @@ class ViewController: UIViewController {
         scrollMainView.addSubview(mapView)
         scrollMainView.addSubview(uploadVideoButton)
         scrollMainView.addSubview(videosTableView)
-        
         scrollMainView.isScrollEnabled = true
         scrollMainView.alwaysBounceVertical = true
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
         let padding: CGFloat = 16
         var currentY: CGFloat = padding
-        
         scrollMainView.frame = view.bounds
         
         imagesScrollView.frame = CGRect(
@@ -102,7 +98,7 @@ class ViewController: UIViewController {
             height: 200
         )
         currentY += imagesScrollView.frame.height + padding
-        
+          
         nameLabel.frame = CGRect(
             x: padding,
             y: currentY,
