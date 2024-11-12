@@ -308,7 +308,6 @@ extension LoginViewController : UIImagePickerControllerDelegate, UINavigationCon
             self.navigationController?.pushViewController(profileVC, animated: true)
         }))
         present(successAlert, animated: true)
-        present(successAlert, animated: true)
 
     }
     
